@@ -1,4 +1,4 @@
-# hw4
+# HomeWork 4
 ## JavaScript Quiz 
 
 This app runs a timed javascript quiz and scores are saved in browser's local storage so they are available even if quiz application is closed or webpage is refreshed.  
