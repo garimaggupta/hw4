@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>High Scores</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <main class="container mt-5" id="display-highscores">
+        <h1>High Scores</h1>
+        <br>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Player Name</th>
+                    <th scope="col">Score</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+
+            </tbody>
+        </table>
+        <div>
+            <button class="btn btn-primary mb-5" id="goBack" onclick="window.location.href='./index.html'">Go Back</button>
+            <button class="btn btn-primary mb-5 ml-5" id="clearScore">Clear HighScores</button>
+        </div>
+    </main>
+
+    <script>
+
+        function compareValues(key, order = 'asc') {
+            return function innerSort(a, b) {
+                if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+                    // property doesn't exist on either object
+                    return 0;
+                }
+
+                const varA = (typeof a[key] === 'string')
+                    ? a[key].toUpperCase() : a[key];
+                const varB = (typeof b[key] === 'string')
+                    ? b[key].toUpperCase() : b[key];
+
+                let comparison = 0;
+                if (varA > varB) {
+                    comparison = 1;
+                } else if (varA < varB) {
+                    comparison = -1;
+                }
+                return (
+                    (order === 'desc') ? (comparison * -1) : comparison
+                );
+            };
+        }
+
+        // Function to remove the highscores from local storage
+        function clearHighScores() {
+            localStorage.removeItem("playerScores")
+            location.reload();
+        }
+
+        // Pull most updated highscores from localstorage
+        var highScores = JSON.parse(localStorage.getItem("playerScores"));
+
+        // Sort highscores on descending order such that highest score is displayed on the top
+        highScores.sort(compareValues('score', 'desc'));
+
+        // Add the highscores to the table to be displayed on the screen
+        highScores.forEach(function (element) {
+            var rowEl = document.createElement("tr");
+            var col1 = document.createElement("td");
+            var col2 = document.createElement("td");
+            col1.textContent = element.playerName;
+            col2.textContent = element.score;
+            document.getElementById("table-body").appendChild(rowEl);
+            rowEl.appendChild(col1);
+            rowEl.appendChild(col2);
+        });
+
+        // Event handler to clear the highscores when Clear Highscores button is clicked
+        var clearHighScoresBtn = document.getElementById("clearScore");
+        clearHighScoresBtn.addEventListener("click", clearHighScores);
+
+    </script>
+</body>
+
+</html>
